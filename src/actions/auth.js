@@ -5,15 +5,25 @@ import { setTracks } from '../actions/track';
 function setMe(user) {
   return {
     type: actionTypes.ME_SET,
-    user
+    user,
+  };
+}
+
+function fetchStream(me, session) {
+  return (dispatch) => {
+    fetch(`//api.soundcloud.com/me/activities?limit=20&offset=0&oauth_token=${session.oauth_token}`)
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch(setTracks(data.collection));
+      });
   };
 }
 
 export function auth() {
-  return function(dispatch) {
-    SC.initialize({ client_id: CLIENT_ID, redirect_uri: REDIRECT_URI });
+  return (dispatch) => {
+    SC.initialize({ client_id: CLIENT_ID, redirect_uri: REDIRECT_URI }); // eslint-disable-line
 
-    SC.connect().then((session) => {
+    SC.connect().then((session) => { // eslint-disable-line
       fetch(`//api.soundcloud.com/me?oauth_token=${session.oauth_token}`)
         .then((response) => response.json())
         .then((me) => {
@@ -21,15 +31,5 @@ export function auth() {
           dispatch(fetchStream(me, session));
         });
     });
-  }
-};
-
-function fetchStream(me, session) {
-  return function(dispatch) {
-    fetch(`//api.soundcloud.com/me/activities?limit=20&offset=0&oauth_token=${session.oauth_token}`)
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch(setTracks(data.collection));
-      });
   };
 }

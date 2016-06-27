@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Stream from './presenter';
 import { shallow } from 'enzyme';
 

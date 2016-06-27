@@ -1,3 +1,4 @@
+/* eslint-disable */
 var webpack = require('webpack');
 
 module.exports = {
@@ -7,11 +8,18 @@ module.exports = {
     './src/index.js'
   ],
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loader: 'react-hot!babel'
-    }]
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'react-hot!babel'
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader', 'eslint-loader']
+      }
+    ]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
@@ -25,6 +33,9 @@ module.exports = {
     contentBase: './dist',
     hot: true,
     historyApiFallback: true
+  },
+  eslint: {
+    configFile: './.eslintrc'
   },
   plugins: [
     new webpack.ProvidePlugin({

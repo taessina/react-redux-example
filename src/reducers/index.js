@@ -6,5 +6,5 @@ import track from './track';
 export default combineReducers({
   auth,
   track,
-  routing: routerReducer
+  routing: routerReducer,
 });

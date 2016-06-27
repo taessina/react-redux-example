@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { CLIENT_ID } from '../../constants/auth';
 
@@ -25,31 +25,44 @@ class Stream extends React.Component {
         <div>
           {
             user ?
-              <div>{user.username}</div> :
-                <button onClick={onAuth} type="button">Login</button>
+              <div>{user.username}</div>
+            :
+              <button onClick={onAuth} type="button">Login</button>
           }
         </div>
         <br />
-      <div>
-      {
-        tracks.map((track, key) => {
-          return (
-            <div className="track" key={key}>
-            {track.origin.title}
-            <button type="button" onClick={() => onPlay(track)}>Play</button>
-            </div>
-          );
-        })
-      }
-      </div>
-      {
-        activeTrack ?
-        <audio id="audio" ref="audio" src={`${activeTrack.origin.stream_url}?client_id=${CLIENT_ID}`}></audio> :
-        null
-      }
+        <div>
+          {
+            tracks.map((track, key) => (
+              <div className="track" key={key}>
+                {track.origin.title}
+                <button type="button" onClick={() => onPlay(track)}>Play</button>
+              </div>
+            ))
+          }
+        </div>
+        {
+          activeTrack ?
+            <audio
+              id="audio"
+              ref="audio"
+              src={`${activeTrack.origin.stream_url}?client_id=${CLIENT_ID}`}
+            >
+            </audio>
+          :
+          null
+        }
       </div>
     );
   }
 }
+
+Stream.propTypes = {
+  activeTrack: PropTypes.object,
+  user: PropTypes.object,
+  tracks: PropTypes.array,
+  onAuth: PropTypes.func,
+  onPlay: PropTypes.func,
+};
 
 export default Stream;

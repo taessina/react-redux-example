@@ -1,3 +1,10 @@
+// @flow
+
+type StreamData = {
+  collection: Array<Track>;
+};
+
+import SC from 'soundcloud';
 import { CLIENT_ID, REDIRECT_URI } from '../constants/auth';
 import * as actionTypes from '../constants/actionTypes';
 import { setTracks } from '../actions/track';
@@ -10,20 +17,20 @@ function setMe(user) {
 }
 
 function fetchStream(me, session) {
-  return (dispatch) => {
+  return (dispatch: Function) => {
     fetch(`//api.soundcloud.com/me/activities?limit=20&offset=0&oauth_token=${session.oauth_token}`)
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: StreamData) => {
         dispatch(setTracks(data.collection));
       });
   };
 }
 
 export function auth() {
-  return (dispatch) => {
-    SC.initialize({ client_id: CLIENT_ID, redirect_uri: REDIRECT_URI }); // eslint-disable-line
+  return (dispatch: Function) => {
+    SC.initialize({ client_id: CLIENT_ID, redirect_uri: REDIRECT_URI });
 
-    SC.connect().then((session) => { // eslint-disable-line
+    SC.connect().then((session) => {
       fetch(`//api.soundcloud.com/me?oauth_token=${session.oauth_token}`)
         .then((response) => response.json())
         .then((me) => {
